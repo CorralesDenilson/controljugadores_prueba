@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academia de Fútbol | Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <img src="logo-ndwb.png" class="login-logo" alt="ND WB">
+      <p class="eyebrow">SISTEMA DE GESTIÓN</p>
+      <h1>Academia de Fútbol</h1>
+      <p class="login-subtitle">Esta es una versión de prueba funcional. Podés registrar jugadores, controlar asistencia, consultar categorías y generar informes.</p>
+      <form id="loginForm">
+        <label>Usuario<input id="loginUser" required placeholder="Ej. entrenador.u13"></label>
+        <label>Contraseña<input id="loginPassword" type="password" required placeholder="••••••••"></label>
+        <button class="primary login-btn" type="submit">Iniciar sesión</button>
+      </form>
+      <div class="demo-credentials">
+        <strong>Acceso de demostración</strong>
+        <span>Usuario: entrenador.u13 · Contraseña: demo123</span>
+        <span>Usuario: admin · Contraseña: admin123</span>
+      </div>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <img class="brand-logo" src="logo-ndwb.png" alt="ND WB">
+      <div><strong>Academia FC</strong><span>Gestión de jugadores</span></div>
+    </div>
+    <nav>
+      <button class="nav-btn active" data-view="dashboard">▦ Dashboard</button>
+      <button class="nav-btn" data-view="players">👥 Jugadores</button>
+      <button class="nav-btn" data-view="categories">▤ Categorías</button>
+      <button class="nav-btn admin-only" data-view="reports">📄 Informes</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="connection-box"><span class="connection-dot"></span><div><strong>Modo de prueba</strong><small>Datos guardados en este navegador</small></div></div>
+      <small>Versión de prueba de Academia FC.</small>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><p class="eyebrow">PANEL DE ENTRENAMIENTO</p><h1 id="pageTitle">Dashboard</h1></div>
+      <div class="top-actions">
+        <div class="user-badge"><span class="user-dot"></span><div><strong id="currentUserName">Entrenador</strong><small id="currentUserRole">U-13</small></div></div>
+        <button class="secondary" id="logoutBtn">Cerrar sesión</button>
+        <button class="primary" id="addPlayerTop">+ Agregar jugador</button>
+      </div>
+    </header>
+
+    <section id="dashboardView" class="view">
+      <div class="trial-banner"><strong>🧪 Versión de prueba</strong><span>Podés probar el sistema con hasta 15 jugadores, 2 categorías y 2 entrenadores. Los datos de esta prueba se guardan en este navegador.</span></div><div class="welcome"><div><span class="pill">PRUEBA</span><h2>Control de jugadores</h2><p>Organizá la información de la academia por categorías y consultá la evolución de cada jugador.</p></div><div class="welcome-ball">⚽</div></div>
+      <div class="stats">
+        <div class="stat"><span>Jugadores</span><strong id="totalPlayers">0</strong></div>
+        <div class="stat"><span>Categorías</span><strong id="totalCategories">0</strong></div>
+        <div class="stat"><span>Faltas este mes</span><strong id="avgAttendance">0</strong></div>
+      </div>
+      <div class="section-head"><div><h3>Categorías</h3><p>Seleccioná una categoría para ver sus jugadores.</p></div><span class="status-badge">● PRUEBA · 15 jugadores máx.</span></div>
+      <div id="categoryCards" class="category-grid"></div>
+    </section>
+
+    <section id="playersView" class="view hidden">
+      <div class="section-head"><div><h3>Jugadores</h3><p>Consultá y administrá las fichas registradas.</p></div><div class="player-filters"><select id="playerCategoryFilter" class="player-category-filter"><option value="">Todas las categorías</option></select><input id="searchInput" class="search" placeholder="Buscar jugador..."></div></div>
+      <div id="playersTable" class="table-wrap"></div>
+    </section>
+
+    <section id="categoriesView" class="view hidden">
+      <div class="section-head"><div><h3>Categorías</h3><p>Organización actual de la academia.</p></div><button class="primary" id="addCategoryBtn">+ Agregar categoría</button></div>
+      <div id="categoriesList" class="category-list"></div>
+      <div id="coachAdminPanel" class="admin-panel hidden">
+        <div class="section-head"><div><h3>Asignación de entrenadores</h3><p>El administrador puede asignar una categoría a cada entrenador.</p></div><button class="primary" id="addCoachBtn">+ Agregar entrenador</button></div>
+        <div id="coachesList" class="coach-list"></div>
+      </div>
+    </section>
+
+    <section id="reportsView" class="view hidden">
+      <div class="section-head"><div><h3>Informes mensuales</h3><p>Generá un PDF de asistencia por categoría y agregá aspectos a considerar.</p></div><span class="status-badge">● Solo administrador</span></div>
+      <div class="report-controls">
+        <label>Categoría<select id="reportCategory"></select></label>
+        <label>Mes<input id="reportMonth" type="month"></label>
+        <label>Entrenamientos del mes<input id="reportSessions" type="number" min="1" max="31" value="8"></label>
+        <button class="primary" id="previewReportBtn">Actualizar informe</button>
+        <button class="primary" id="generateReportBtn">📄 Generar PDF</button>
+      </div>
+      <div class="form-section report-observations">
+        <div class="form-section-title">📝 Aspectos a considerar</div>
+        <div id="defaultAspects" class="aspect-list"></div>
+        <label>Observaciones adicionales<textarea id="reportExtraObservations" rows="4" placeholder="Agregar otras observaciones para este informe..."></textarea></label>
+        <button class="secondary" id="saveReportObservations" type="button">Guardar observaciones</button>
+      </div>
+      <div id="reportPreview" class="report-preview"></div>
+    </section>
+  </main>
+
+  <div class="modal hidden" id="playerModal">
+    <div class="modal-card">
+      <div class="modal-head"><div><p class="eyebrow">FICHA DEL JUGADOR</p><h2 id="modalTitle">Agregar jugador</h2></div><button class="close" id="closeModal">×</button></div>
+      <form id="playerForm">
+        <input type="hidden" id="playerId">
+        <div class="form-grid">
+          <label>Nombre completo<input id="name" required placeholder="Ej. Juan Pérez"></label>
+          <label>Fecha de nacimiento<input id="birthDate" type="date" required></label>
+          <label>Teléfono del encargado<input id="guardianPhone" placeholder="Ej. 8888-8888"></label>
+          <label>N.º de camisa<input id="jersey" type="number" min="0" placeholder="Sin uniforme"></label>
+          <label>Categoría<select id="category"></select></label>
+          <label>Posición<select id="position"><option>Portero</option><option>Defensa</option><option>Mediocampista</option><option>Delantero</option></select></label>
+          <label>Pie fuerte<select id="foot"><option>Derecho</option><option>Izquierdo</option><option>Ambos</option></select></label>
+          <label>Mes de asistencia<input id="attendanceMonth" type="month"></label>
+          <label>Estado administrativo<select id="adminStatus"><option value="TODO_EN_REGLA">Todo en regla✅</option><option value="NO_SE_HA_REPORTADO">❌ NO se ha reportado</option><option value="ARREGLO_DE_PAGO">🗣️ Arreglo de pago</option><option value="SALIERON_DE_LA_ACADEMIA">🚫 Salieron de la Academia</option></select></label>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Control de asistencia</div>
+          <p class="form-help">Hacé clic en los días que el jugador faltó. Los días marcados quedan guardados por mes.</p>
+          <div class="calendar-head"><button type="button" class="secondary calendar-nav" id="prevAttendanceMonth">‹</button><strong id="attendanceMonthLabel"></strong><button type="button" class="secondary calendar-nav" id="nextAttendanceMonth">›</button></div>
+          <div id="attendanceCalendar" class="attendance-calendar"></div>
+          <div class="attendance-summary" id="attendanceSummary"></div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Información médica</div>
+          <div class="form-grid">
+            <label>Lesiones pasadas<textarea id="pastInjuries" rows="3" placeholder="Ej. Esguince de tobillo derecho en 2025."></textarea></label>
+            <label>Padecimientos / enfermedades<textarea id="conditions" rows="3" placeholder="Indicá si posee algún padecimiento o enfermedad relevante."></textarea></label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Información deportiva</div>
+          <label>Aspectos importantes de juego<textarea id="gameAspects" rows="4" placeholder="Fortalezas, características de juego, aspectos tácticos o técnicos importantes..."></textarea></label>
+          <label>Observaciones generales del entrenador<textarea id="notes" rows="4" placeholder="Observaciones generales del jugador..."></textarea></label>
+        </div>
+
+        <div class="form-section evolution-form-section">
+          <div class="form-section-title">Registrar evolución</div>
+          <p class="form-help">Cada vez que guardés una actualización, se agregará al historial del jugador sin borrar las anteriores.</p>
+          <div class="form-grid">
+            <label>Fecha de seguimiento<input id="evolutionDate" type="date"></label>
+            <div></div>
+          </div>
+          <label>¿Qué ha mejorado?<textarea id="evolutionImproved" rows="3" placeholder="Ej. Mejoró el control orientado y la definición."></textarea></label>
+          <label>¿Qué debe seguir mejorando?<textarea id="evolutionImprove" rows="3" placeholder="Ej. Debe seguir trabajando la velocidad y la toma de decisiones."></textarea></label>
+        </div>
+
+        <div class="form-actions"><button type="button" class="secondary" id="cancelBtn">Cancelar</button><button type="submit" class="primary">Guardar jugador</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="categoryModal">
+    <div class="modal-card category-modal-card"><div class="modal-head"><div><p class="eyebrow">ADMINISTRACIÓN</p><h2 id="categoryModalTitle">Agregar categoría</h2></div><button class="close" id="closeCategory">×</button></div>
+      <form id="categoryForm"><input type="hidden" id="categoryEditOriginal"><label>Nombre de la categoría<input id="categoryName" required placeholder="Ej. U-18"></label><div class="form-actions"><button type="button" class="secondary" id="cancelCategory">Cancelar</button><button type="submit" class="primary">Agregar categoría</button></div></form>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="coachModal">
+    <div class="modal-card category-modal-card">
+      <div class="modal-head"><div><p class="eyebrow">ADMINISTRACIÓN</p><h2 id="coachModalTitle">Agregar entrenador</h2></div><button class="close" id="closeCoach">×</button></div>
+      <form id="coachForm">
+        <label>Nombre completo<input id="coachName" required placeholder="Ej. Carlos Rodríguez"></label>
+        <label>Usuario<input id="coachUsername" required placeholder="Ej. entrenador.u15">
+        <input type="hidden" id="coachEditOriginal"></label>
+        <label>Contraseña<input id="coachPassword" type="password" placeholder="Contraseña"></label>
+        <label>Categoría asignada<select id="coachCategory"></select></label>
+        <div class="form-actions"><button type="button" class="secondary" id="cancelCoach">Cancelar</button><button type="submit" class="primary" id="saveCoachBtn">Crear entrenador</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="detailModal">
+    <div class="modal-card detail-card">
+      <div class="modal-head"><div><p class="eyebrow">INFORMACIÓN DEL JUGADOR</p><h2 id="detailName">Jugador</h2></div><button class="close" id="closeDetail">×</button></div>
+      <div class="player-detail"><div class="avatar" id="detailAvatar">⚽</div><div class="detail-main"><div class="detail-grid" id="detailGrid"></div>
+        <div class="notes-box"><span>Lesiones pasadas</span><p id="detailInjuries">Sin lesiones pasadas registradas.</p></div>
+        <div class="notes-box"><span>Padecimientos / enfermedades</span><p id="detailConditions">Sin padecimientos o enfermedades registrados.</p></div>
+        <div class="notes-box"><span>Aspectos importantes de juego</span><p id="detailGameAspects">Sin aspectos importantes registrados.</p></div>
+        <div class="notes-box"><span>Observaciones del entrenador</span><p id="detailNotes">Sin observaciones.</p></div>
+        <div class="notes-box"><span>Estado administrativo</span><p id="detailAdminStatus">Todo en regla✅</p></div>
+        <div class="notes-box"><span>Historial de faltas por mes</span><div id="detailAttendance"></div></div>
+        <div class="evolution-box"><div class="evolution-head"><div><span>Evolución del jugador</span><small>Seguimiento registrado con el paso del tiempo</small></div></div><div id="evolutionHistory"></div></div>
+      </div></div>
+      <div class="form-actions"><button class="secondary" id="editDetail">Editar</button><button class="danger" id="deleteDetail">Eliminar</button></div>
+    </div>
+  </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
